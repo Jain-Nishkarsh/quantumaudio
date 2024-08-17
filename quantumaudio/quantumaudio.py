@@ -13,10 +13,10 @@
 
 import numpy as np
 import numpy.typing as npt
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute
-from qiskit_aer import AerProvider
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerProvider, AerSimulator
 from qiskit.result import Counts
-from qiskit.tools import job_monitor
+# from qiskit.tools import job_monitor
 from qiskit.compiler import transpile
 from qiskit.visualization import plot_histogram
 from bitstring import BitArray
@@ -764,11 +764,12 @@ class QuantumAudio():
         else:
             circuit = self.circuit
             
-        job = execute(circuit, backend, shots=shots)
-        if backend_name != 'aer_simulator':
-            job_monitor(job)
-        self.result = job.result()
-        self.counts = job.result().get_counts()
+        simulator = AerSimulator()
+        job_result = simulator.run(circuit, shots=shots).result()
+        # if backend_name != 'aer_simulator':
+        #     job_monitor(job)
+        self.result = job_result
+        self.counts = job_result.get_counts()
         return self
     
     def reconstruct_audio(self, **additional_kwargs: Any) -> 'QuantumAudio':
