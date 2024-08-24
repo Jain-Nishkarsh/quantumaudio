@@ -472,7 +472,7 @@ class QSM():
             a_bit = (a >> i) & 1
             astr.append(a_bit)
             if a_bit:
-                qa.mct(treg, areg_qubit)
+                qa.mcx(treg, areg_qubit)
 
         if print_state:        
             print('|',end='')       
