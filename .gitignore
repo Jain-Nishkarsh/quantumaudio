@@ -9,3 +9,4 @@ qa/*
 __pycache__/*
 *.zip
 docs/_build/*
+venv

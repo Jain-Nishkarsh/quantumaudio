@@ -16,7 +16,6 @@ import numpy.typing as npt
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerProvider, AerSimulator
 from qiskit.result import Counts
-# from qiskit.tools import job_monitor
 from qiskit.compiler import transpile
 from qiskit.visualization import plot_histogram
 from bitstring import BitArray
@@ -463,7 +462,7 @@ class QSM():
                 console, for visualization purposes only. To be used together 
                 with all other SQPAM methods with a 'print_state' kwarg.
         """ 
-        
+
         # Applies the necessary NOT gates at index t
         self.treg_index_X(self, qa, t, treg)
         astr=[]
@@ -757,17 +756,15 @@ class QuantumAudio():
         """
         self.shots = shots
         backend = provider.get_backend(backend_name)
-        
         if backend_name != 'aer_simulator':
             circuit = transpile(self.circuit, backend=backend, optimization_level=3)
             
         else:
-            circuit = self.circuit
+            circuit = self.circuit.decompose(reps=5)
             
         simulator = AerSimulator()
         job_result = simulator.run(circuit, shots=shots).result()
-        # if backend_name != 'aer_simulator':
-        #     job_monitor(job)
+        
         self.result = job_result
         self.counts = job_result.get_counts()
         return self
